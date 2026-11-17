@@ -143,20 +143,7 @@ Running `OptionGreeksTable.ipynb` writes `greeks_table_aligned_decimals.png` to 
 
 ## Implementation notes and limitations
 
-The notes below apply to the published notebooks and their illustrative assumptions, not to the complete thesis implementation or its validation. Keep these details in mind when reproducing or extending the included experiments:
-
-- **Volatility is hard-coded in the multi-model bond routines.** Both `LatticeConvertibleBond` and `getPrice_LatticeModel` set `sigma = 0.2` internally. Changing the notebook's global `sigma` does not change their valuation volatility. The separate `CRR_convertible_bond` function accepts `sigma` explicitly.
-- **Conversion defaults differ.** `CRR_convertible_bond` defaults to European conversion, `LatticeConvertibleBond` defaults to American conversion, and `getPrice_LatticeModel` always checks immediate conversion.
-- **Dividend and carry inputs are not handled uniformly.** CRR probability calculations use `r`, while Jarrow–Rudd and Haahtela incorporate `q`. Tian reads the global variable `b`, so changing `r` or `q` requires checking that `b = r - q` remains consistent.
-- **Coupon timing uses a custom ceiling-based rule.** It is not a general payment-date schedule. Review its alignment with the tree grid before changing maturity or the number of steps.
-- **The option benchmark needs care.** The function `calculate_option_price`, used in the section labelled European convergence, includes an early-exercise check. With the default non-dividend-paying call this distinction may not be visible, but the function should not be treated as a general European pricer.
-- **Two Black–Scholes expressions differ.** The first `black_scholes` helper places `b` outside the maturity multiplier in its `d1` numerator. The later explicit calculation and `black_scholes_call_price` use the conventional `(r + sigma**2 / 2) * T` term. Review the first helper before using it as a numerical reference.
-- **Greeks and Taylor validation code are outside the published selection.** The table notebook formats predefined Greeks values; it does not include the code used to derive them. The Taylor-based validation discussed in the thesis is also not included here. These omissions limit what can be reproduced from this repository alone and do not imply that those calculations or checks were not performed as part of the thesis.
-- **Input validation is limited.** Check positive maturity, volatility and step count, valid branch probabilities, and admissible up/down factors before using other parameter sets.
-- **The credit treatment is simplified.** There is no explicit default/recovery process, market calibration, stochastic rate model, issuer call schedule or holder put schedule.
-- **Compatibility may require minor maintenance.** The table notebook uses `DataFrame.applymap`; its saved output records a deprecation warning. Depending on the pandas version, this may need updating to `DataFrame.map`.
-
-Saved notebook outputs document previous runs; they are not an automated correctness check. This partial code release does not provide everything needed to reproduce all thesis results. Independently validate any adaptation of the published implementations before using it beyond the illustrated research examples.
+This is a partial code release and does not provide everything needed to reproduce all thesis results. Independently validate any adaptation of the published implementations before using it beyond the illustrated research examples.
 
 ## License
 
