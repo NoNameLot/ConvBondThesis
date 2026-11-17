@@ -2,7 +2,9 @@
 
 Python notebooks accompanying thesis research on **convertible bond valuation with binomial lattice models**. The project implements a Cox–Ross–Rubinstein (CRR) convertible bond model, compares alternative tree parameterizations, and explores how prices change as the number of time steps increases.
 
-The repository also includes vanilla option benchmarks and a notebook that renders a manually populated Greeks table.
+**This repository contains a selection of the code developed for the thesis, rather than the complete research codebase.** Some calculations and validation procedures discussed in the thesis are outside the published notebooks. Their absence here should not be interpreted as their absence from the thesis work.
+
+The published material also includes vanilla option benchmarks and a notebook that renders a Greeks table from predefined values. The code used to derive those values is not included in this repository.
 
 ## Repository contents
 
@@ -10,7 +12,7 @@ The repository also includes vanilla option benchmarks and a notebook that rende
 | --- | --- |
 | [CRR+Alternative+ConvergenceAnalysis.ipynb](CRR%2BAlternative%2BConvergenceAnalysis.ipynb) | Main convertible bond implementation: stock, bond value and conversion probability trees; European and American conversion; comparisons across five models; convergence plots. |
 | [CRR Benchmark.ipynb](CRR%20Benchmark.ipynb) | Black–Scholes–Merton calculations, European and American CRR option pricing, a call price surface, and comparisons of alternative option trees. |
-| [OptionGreeksTable.ipynb](OptionGreeksTable.ipynb) | Formats predefined Delta, Gamma, Rho, Vega and Theta values into a table and saves a PNG. It does not calculate Greeks from the pricing functions. |
+| [OptionGreeksTable.ipynb](OptionGreeksTable.ipynb) | Formats predefined Delta, Gamma, Rho, Vega and Theta values into a table and saves a PNG. The underlying Greeks calculation code is not included in the published selection. |
 | [Greeks_Table.png](Greeks_Table.png) | Committed Greeks table image. |
 | [.vscode/launch.json](.vscode/launch.json) | Optional VS Code configuration for debugging the current Python file. |
 
@@ -141,7 +143,7 @@ Running `OptionGreeksTable.ipynb` writes `greeks_table_aligned_decimals.png` to 
 
 ## Implementation notes and limitations
 
-These are research notebooks with illustrative assumptions. Keep the following details in mind when interpreting or extending the experiments:
+The notes below apply to the published notebooks and their illustrative assumptions, not to the complete thesis implementation or its validation. Keep these details in mind when reproducing or extending the included experiments:
 
 - **Volatility is hard-coded in the multi-model bond routines.** Both `LatticeConvertibleBond` and `getPrice_LatticeModel` set `sigma = 0.2` internally. Changing the notebook's global `sigma` does not change their valuation volatility. The separate `CRR_convertible_bond` function accepts `sigma` explicitly.
 - **Conversion defaults differ.** `CRR_convertible_bond` defaults to European conversion, `LatticeConvertibleBond` defaults to American conversion, and `getPrice_LatticeModel` always checks immediate conversion.
@@ -149,12 +151,12 @@ These are research notebooks with illustrative assumptions. Keep the following d
 - **Coupon timing uses a custom ceiling-based rule.** It is not a general payment-date schedule. Review its alignment with the tree grid before changing maturity or the number of steps.
 - **The option benchmark needs care.** The function `calculate_option_price`, used in the section labelled European convergence, includes an early-exercise check. With the default non-dividend-paying call this distinction may not be visible, but the function should not be treated as a general European pricer.
 - **Two Black–Scholes expressions differ.** The first `black_scholes` helper places `b` outside the maturity multiplier in its `d1` numerator. The later explicit calculation and `black_scholes_call_price` use the conventional `(r + sigma**2 / 2) * T` term. Review the first helper before using it as a numerical reference.
-- **Greeks are not computed or validated here.** The table notebook contains fixed values, without a calculation pipeline linking them to the bond models. The repository does not implement the Taylor-based validation described in the original project abstract.
+- **Greeks and Taylor validation code are outside the published selection.** The table notebook formats predefined Greeks values; it does not include the code used to derive them. The Taylor-based validation discussed in the thesis is also not included here. These omissions limit what can be reproduced from this repository alone and do not imply that those calculations or checks were not performed as part of the thesis.
 - **Input validation is limited.** Check positive maturity, volatility and step count, valid branch probabilities, and admissible up/down factors before using other parameter sets.
 - **The credit treatment is simplified.** There is no explicit default/recovery process, market calibration, stochastic rate model, issuer call schedule or holder put schedule.
 - **Compatibility may require minor maintenance.** The table notebook uses `DataFrame.applymap`; its saved output records a deprecation warning. Depending on the pandas version, this may need updating to `DataFrame.map`.
 
-Saved notebook outputs document previous runs; they are not an automated correctness check. A full numerical validation is required before relying on these implementations beyond the illustrated research examples.
+Saved notebook outputs document previous runs; they are not an automated correctness check. This partial code release does not provide everything needed to reproduce all thesis results. Independently validate any adaptation of the published implementations before using it beyond the illustrated research examples.
 
 ## License
 
