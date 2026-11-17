@@ -141,7 +141,7 @@ Running `OptionGreeksTable.ipynb` writes `greeks_table_aligned_decimals.png` to 
 
 ![Committed Greeks table](Greeks_Table.png)
 
-## Implementation notes and limitations
+## Implementation notes
 
 This is a partial code release and does not provide everything needed to reproduce all thesis results. Independently validate any adaptation of the published implementations before using it beyond the illustrated research examples.
 
